@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  # Zookeeper service configuration
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest # Use the latest Zookeeper image from Confluent
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181 # Set the client port to 2181
+      ZOOKEEPER_TICK_TIME: 2000   # Set the tick time to 2000ms
+
+  # Kafka service configuration
+  kafka:
+    image: confluentinc/cp-kafka:latest # Use the latest Kafka image from Confluent
+    depends_on:
+      - zookeeper # Ensure Kafka starts after Zookeeper
+    ports:
+      - "9092:9092" # Expose Kafka broker port for internal communication
+      - "29092:29092" # Expose Kafka broker port for external communication
+    environment:
+      KAFKA_BROKER_ID: 1 # Set the broker ID to 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Connect to Zookeeper at zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092 # Advertise listeners for internal and external communication
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT # Map security protocols for listeners
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT # Use PLAINTEXT for inter-broker communication
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Set replication factor for the offsets topic to 1
+
+  # Order processor service configuration
+  order-processor:
+    build:
+      context: .. # Set the build context to the parent directory
+      dockerfile: docker/Dockerfile # Specify the Dockerfile location
+    depends_on:
+      - kafka # Ensure the order processor starts after Kafka
+    environment:
+      KAFKA_BROKER: kafka:9092 # Set the Kafka broker address
+    volumes:
+      - ../orders-consumer-qa-home-task/logs:/app/logs # Mount the logs directory from the host to the container
+    ports:
+      - "8080:8080" # Expose port 8080 for the order processor application
+

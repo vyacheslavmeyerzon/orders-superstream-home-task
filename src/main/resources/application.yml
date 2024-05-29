@@ -1,0 +1,22 @@
+logging:
+  level:
+    # Set logging levels to ERROR to suppress INFO logs
+    org:
+      apache:
+        zookeeper: ERROR
+    kafka:
+      server:
+        KafkaServer: ERROR
+    springframework:
+      kafka: ERROR
+
+  # Configure logging output to file
+  file:
+    name: logs/app.log
+
+  pattern:
+    console: ""
+
+  # Optionally, set a custom file log pattern if needed
+  # file:
+  #   format: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
