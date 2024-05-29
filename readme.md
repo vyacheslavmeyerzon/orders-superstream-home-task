@@ -112,3 +112,6 @@ who are looking to remove support for older protocol versions.
 
 That's why the problem was resolved both by rolling back client version (then rolling back to default 1.x.x.x protocol) or by rolling forward kafka version (because it then supported protocol 2.1.0.0 fine).
 ```
+## Be careful:
+when increasing on Java 20 and POM dependencies for Kafka and Spring: TestConfig.java
+Will require additional implementations in the EmbeddedKafkaBroker embeddedKafkaBroker method
