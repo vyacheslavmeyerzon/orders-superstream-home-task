@@ -40,8 +40,8 @@ To run this application, you will need:
 
 ### Step 1: Clone the Project Repository:
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/vyacheslavmeyerzon/orders-superstream-home-task
+cd orders-superstream-home-task
 ```
 
 ### Step 2: Clone Go microservice Repository:
